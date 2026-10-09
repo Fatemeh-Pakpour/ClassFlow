@@ -3,19 +3,24 @@
   "private": true,
   "packageManager": "pnpm@11.6.0",
   "engines": {
-    "node": ">=20.9.0",
+    "node": ">=20.19.0",
     "pnpm": ">=10"
   },
   "scripts": {
     "dev:web": "pnpm --filter @classflow/web dev",
     "build:web": "pnpm --filter @classflow/web build",
     "start:web": "pnpm --filter @classflow/web start",
+    "dev:api": "pnpm --filter @classflow/api dev",
+    "build:api": "pnpm --filter @classflow/api build",
+    "start:api": "pnpm --filter @classflow/api start:prod",
     "dev": "pnpm -r --parallel dev",
     "build": "pnpm -r build",
     "lint": "pnpm -r lint",
     "infra:up": "docker compose -f infra/compose.yaml up -d --wait",
     "infra:down": "docker compose -f infra/compose.yaml down",
     "infra:logs": "docker compose -f infra/compose.yaml logs -f",
-    "infra:ps": "docker compose -f infra/compose.yaml ps"
+    "infra:ps": "docker compose -f infra/compose.yaml ps",
+    "test": "pnpm -r test",
+    "typecheck": "pnpm -r typecheck"
   }
 }

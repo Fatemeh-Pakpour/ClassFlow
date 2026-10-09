@@ -5,3 +5,9 @@ packages:
 allowBuilds:
   sharp: false
   unrs-resolver: false
+
+peerDependencyRules:
+  allowedVersions:
+    # tsconfck (via vite-tsconfig-paths) only parses tsconfig files and works
+    # with TS 6; its peer range hasn't been widened upstream yet.
+    tsconfck>typescript: "6"
