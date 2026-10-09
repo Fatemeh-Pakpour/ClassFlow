@@ -12,6 +12,10 @@
     "start:web": "pnpm --filter @classflow/web start",
     "dev": "pnpm -r --parallel dev",
     "build": "pnpm -r build",
-    "lint": "pnpm -r lint"
+    "lint": "pnpm -r lint",
+    "infra:up": "docker compose -f infra/compose.yaml up -d --wait",
+    "infra:down": "docker compose -f infra/compose.yaml down",
+    "infra:logs": "docker compose -f infra/compose.yaml logs -f",
+    "infra:ps": "docker compose -f infra/compose.yaml ps"
   }
 }

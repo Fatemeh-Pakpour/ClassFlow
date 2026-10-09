@@ -1,0 +1,64 @@
+# Local infrastructure for ClassFlow (backing services only).
+# The apps (web, api, worker) run on the host via pnpm and connect to these.
+#
+#   pnpm infra:up      start everything and wait until healthy
+#   pnpm infra:down    stop (data is kept in named volumes)
+#
+# Values come from infra/.env (copy infra/.env.example to get started).
+
+name: classflow
+
+services:
+  postgres:
+    image: postgres:18-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:?set POSTGRES_USER in infra/.env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in infra/.env}
+      POSTGRES_DB: ${POSTGRES_DB:?set POSTGRES_DB in infra/.env}
+    ports:
+      # Bound to localhost only, so the database is not exposed to the network.
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      # Postgres 18+ images keep data under /var/lib/postgresql/<major>/docker,
+      # so the volume is mounted at the parent directory (not .../data).
+      - postgres-data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - backend
+
+  rabbitmq:
+    image: rabbitmq:4.3-management-alpine
+    restart: unless-stopped
+    # RabbitMQ stores data per node name, which is derived from the hostname.
+    # A fixed hostname keeps queues/messages across container re-creation.
+    hostname: rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:?set RABBITMQ_USER in infra/.env}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:?set RABBITMQ_PASSWORD in infra/.env}
+      RABBITMQ_DEFAULT_VHOST: ${RABBITMQ_VHOST:-classflow}
+    ports:
+      - "127.0.0.1:${RABBITMQ_PORT:-5672}:5672"              # AMQP
+      - "127.0.0.1:${RABBITMQ_MANAGEMENT_PORT:-15672}:15672" # management UI
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    networks:
+      - backend
+
+volumes:
+  postgres-data:
+  rabbitmq-data:
+
+networks:
+  backend:
