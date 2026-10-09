@@ -7,12 +7,17 @@
     "pnpm": ">=10"
   },
   "scripts": {
+    "postinstall": "pnpm --filter @classflow/db build",
     "dev:web": "pnpm --filter @classflow/web dev",
     "build:web": "pnpm --filter @classflow/web build",
     "start:web": "pnpm --filter @classflow/web start",
     "dev:api": "pnpm --filter @classflow/api dev",
     "build:api": "pnpm --filter @classflow/api build",
     "start:api": "pnpm --filter @classflow/api start:prod",
+    "db:generate": "pnpm --filter @classflow/db db:generate",
+    "db:migrate": "pnpm --filter @classflow/db db:migrate",
+    "db:check": "pnpm --filter @classflow/db db:check",
+    "db:studio": "pnpm --filter @classflow/db db:studio",
     "dev": "pnpm -r --parallel dev",
     "build": "pnpm -r build",
     "lint": "pnpm -r lint",

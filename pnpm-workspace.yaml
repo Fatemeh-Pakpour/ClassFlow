@@ -5,6 +5,8 @@ packages:
 allowBuilds:
   sharp: false
   unrs-resolver: false
+  # Binary comes from the @esbuild/<platform> optional dependency; postinstall not needed.
+  esbuild: false
 
 peerDependencyRules:
   allowedVersions:
