@@ -23,6 +23,10 @@ export const envSchema = z.object({
     ),
 
   DATABASE_URL: z.url({ protocol: /^postgres(ql)?$/ }),
+  // Per process. Keep (apps × replicas × pool max) below Postgres max_connections (100 by default).
+  DATABASE_POOL_MAX: z.coerce.number().int().min(1).max(100).default(10),
+  DATABASE_LOG_QUERIES: z.stringbool().default(false),
+
   RABBITMQ_URL: z.url({ protocol: /^amqps?$/ }),
 });
 
