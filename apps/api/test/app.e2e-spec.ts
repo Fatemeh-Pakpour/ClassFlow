@@ -4,6 +4,15 @@ import request from 'supertest';
 import { App } from 'supertest/types.js';
 import { AppModule } from './../src/app.module.js';
 import { configureApp } from './../src/app.setup.js';
+import { getDrizzleToken } from '@nestjs/drizzle';
+
+// HTTP-layer e2e: Postgres is stubbed so these run without Docker.
+// Tests that exercise real queries belong in a separate integration suite.
+const fakeDb = {
+  execute: async () => ({ rows: [] }),
+  // DrizzleModule closes db.$client on shutdown.
+  $client: { end: async () => {} },
+};
 
 describe('App (e2e)', () => {
   let app: INestApplication<App>;
@@ -11,7 +20,10 @@ describe('App (e2e)', () => {
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
-    }).compile();
+    })
+      .overrideProvider(getDrizzleToken())
+      .useValue(fakeDb)
+      .compile();
 
     app = moduleFixture.createNestApplication();
     configureApp(app);
@@ -22,7 +34,10 @@ describe('App (e2e)', () => {
     return request(app.getHttpServer())
       .get('/api/health')
       .expect(200)
-      .expect((res) => expect(res.body.status).toBe('ok'));
+      .expect((res) => {
+        expect(res.body.status).toBe('ok');
+        expect(res.body.details.database.status).toBe('up');
+      });
   });
 
   it('sets security headers', () => {
