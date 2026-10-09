@@ -22,3 +22,7 @@ Independently actionable tickets, real failure scenarios, acceptance criteria, t
 
 Phase 5 — Engineering Mentorship
 Five challenging design questions for you to answer before implementation.
+
+
+Your high-level architecture:
+<img width="550" height="413" alt="image" src="https://github.com/user-attachments/assets/c561be11-8301-414d-9ba8-d40b2d47993a" />
