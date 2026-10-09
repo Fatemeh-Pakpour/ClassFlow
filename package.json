@@ -1,0 +1,17 @@
+{
+  "name": "classflow",
+  "private": true,
+  "packageManager": "pnpm@11.6.0",
+  "engines": {
+    "node": ">=20.9.0",
+    "pnpm": ">=10"
+  },
+  "scripts": {
+    "dev:web": "pnpm --filter @classflow/web dev",
+    "build:web": "pnpm --filter @classflow/web build",
+    "start:web": "pnpm --filter @classflow/web start",
+    "dev": "pnpm -r --parallel dev",
+    "build": "pnpm -r build",
+    "lint": "pnpm -r lint"
+  }
+}
