@@ -18,13 +18,13 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:?set POSTGRES_DB in infra/.env}
     ports:
       # Bound to localhost only, so the database is not exposed to the network.
-      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
+      - "127.0.0.1:${POSTGRES_PORT:-5433}:5433"
     volumes:
       # Postgres 18+ images keep data under /var/lib/postgresql/<major>/docker,
       # so the volume is mounted at the parent directory (not .../data).
       - postgres-data:/var/lib/postgresql
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      test: [ "CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -43,12 +43,12 @@ services:
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:?set RABBITMQ_PASSWORD in infra/.env}
       RABBITMQ_DEFAULT_VHOST: ${RABBITMQ_VHOST:-classflow}
     ports:
-      - "127.0.0.1:${RABBITMQ_PORT:-5672}:5672"              # AMQP
+      - "127.0.0.1:${RABBITMQ_PORT:-5672}:5672" # AMQP
       - "127.0.0.1:${RABBITMQ_MANAGEMENT_PORT:-15672}:15672" # management UI
     volumes:
       - rabbitmq-data:/var/lib/rabbitmq
     healthcheck:
-      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      test: [ "CMD", "rabbitmq-diagnostics", "-q", "ping" ]
       interval: 15s
       timeout: 10s
       retries: 5

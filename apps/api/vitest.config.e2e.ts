@@ -11,7 +11,7 @@ export default defineConfig({
     env: {
       NODE_ENV: 'test',
       CORS_ORIGINS: 'http://localhost:3000',
-      DATABASE_URL: 'postgresql://test:test@localhost:5432/test',
+      DATABASE_URL: 'postgresql://test:test@localhost:5433/test',
       RABBITMQ_URL: 'amqp://test:test@localhost:5672/test',
     },
   },

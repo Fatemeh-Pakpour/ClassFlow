@@ -15,6 +15,7 @@ if (!connectionString) {
 }
 
 const migrationsFolder = fileURLToPath(new URL('../drizzle', import.meta.url));
+
 const { db, pool } = createDb({
   connectionString,
   maxConnections: 1,
