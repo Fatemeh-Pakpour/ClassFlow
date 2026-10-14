@@ -9,6 +9,7 @@ import { timestamp, uuid } from 'drizzle-orm/pg-core';
 
 // UUIDv7 is time-ordered: index-friendly like a serial, but safe to expose in
 // URLs and to generate outside the database. Native in PostgreSQL 18+.
+// UUIDv7 offers a time-ordered design that can improve index locality compared with random UUIDv4.
 export const id = () =>
   uuid()
     .primaryKey()
