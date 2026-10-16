@@ -1,24 +1,22 @@
 import { sql } from 'drizzle-orm';
-import { pgEnum, pgTable, text, timestamp, uniqueIndex } from 'drizzle-orm/pg-core';
+import { pgEnum, pgTable, text, timestamp, uniqueIndex, varchar } from 'drizzle-orm/pg-core';
 import { id, timestamps } from './_columns.ts';
 
 export const userStatusEnum = pgEnum('user_status', [
   'pending_verification',
   'active',
-  'suspended',
-  'pending_deletion',
+  'suspended'
 ]);
 
 export const users = pgTable(
   'users',
   {
     id: id(),
-    email: text().notNull(),
-    name: text().notNull(),
+    email: varchar({ length: 254 }).notNull(),
+    name: varchar({ length: 100 }).notNull(),
     status: userStatusEnum()
-      .notNull()
-      .default('pending_verification'),
-    deleted_at: timestamp({ withTimezone: true }).defaultNow(),
+      .notNull(),
+    email_verified_at: timestamp({ withTimezone: true }),
     ...timestamps,
   },
   (table) => [

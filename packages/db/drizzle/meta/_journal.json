@@ -8,6 +8,27 @@
       "when": 1791543786475,
       "tag": "0000_init",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1792138899763,
+      "tag": "0001_square_husk",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1792138944517,
+      "tag": "0002_icy_jetstream",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1792139909596,
+      "tag": "0003_broken_bushwacker",
+      "breakpoints": true
     }
   ]
 }
