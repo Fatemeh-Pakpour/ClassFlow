@@ -28,6 +28,11 @@ export const envSchema = z.object({
   DATABASE_LOG_QUERIES: z.stringbool().default(false),
 
   RABBITMQ_URL: z.url({ protocol: /^amqps?$/ }),
+
+  // Auth0 tenant that issues access tokens, e.g. https://classflow.eu.auth0.com/
+  AUTH0_ISSUER_BASE_URL: z.url({ protocol: /^https$/ }),
+  // Identifier of the Auth0 API (Resource Server); must match the token's `aud`.
+  AUTH0_AUDIENCE: z.string().min(1),
 });
 
 export type Env = z.infer<typeof envSchema>;
