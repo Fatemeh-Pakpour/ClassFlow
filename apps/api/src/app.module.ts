@@ -3,6 +3,7 @@ import { Module, StandardSchemaValidationPipe } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_PIPE } from '@nestjs/core';
 import { DrizzleModule } from '@nestjs/drizzle';
+import { AuthModule } from './auth/auth.module.js';
 import { envSchema, type Env } from './config/env.schema.js';
 import { HealthModule } from './health/health.module.js';
 
@@ -27,6 +28,7 @@ import { HealthModule } from './health/health.module.js';
         }).db,
       }),
     }),
+    AuthModule,
     HealthModule,
   ],
   providers: [
