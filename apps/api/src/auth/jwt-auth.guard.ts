@@ -3,11 +3,12 @@ import {
   type ExecutionContext,
   HttpException,
   Injectable,
+  Logger,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Reflector } from '@nestjs/core';
 import type { Request, RequestHandler, Response } from 'express';
-import { auth, UnauthorizedError } from 'express-oauth2-jwt-bearer';
+import { auth, InvalidTokenError, UnauthorizedError } from 'express-oauth2-jwt-bearer';
 import type { Env } from '../config/env.schema.js';
 import { IS_PUBLIC_KEY } from './public.decorator.js';
 
@@ -18,6 +19,7 @@ import { IS_PUBLIC_KEY } from './public.decorator.js';
  */
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
+  private readonly logger = new Logger(JwtAuthGuard.name);
   private readonly checkJwt: RequestHandler;
 
   constructor(
@@ -49,8 +51,15 @@ export class JwtAuthGuard implements CanActivate {
       // Map the SDK's 400/401/403 errors to Nest responses, keeping the
       // WWW-Authenticate header RFC 6750 clients rely on.
       if (err instanceof UnauthorizedError) {
-        res.set(err.headers);
-        throw new HttpException(err.message, err.status);
+        // The SDK wraps every verification failure (including network errors
+        // reaching Auth0) in InvalidTokenError with the raw message, which also
+        // lands in WWW-Authenticate. Log it here; send clients the generic one.
+        const safe = err instanceof InvalidTokenError ? new InvalidTokenError() : err;
+        if (safe !== err) this.logger.debug(`Token rejected: ${err.message}`);
+        // These lines preserve the authentication headers and convert the SDK error into a NestJS HTTP response, typically 401 Unauthorized.
+        res.set(safe.headers);
+        // That lets NestJS handle unexpected failures separately instead of incorrectly treating every error as an authentication failure.
+        throw new HttpException(safe.message, safe.status);
       }
       throw err;
     }
