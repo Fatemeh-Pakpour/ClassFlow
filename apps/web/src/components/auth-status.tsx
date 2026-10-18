@@ -15,7 +15,7 @@ export async function AuthStatus() {
 
   return (
     <div className="flex items-center gap-4">
-      <span>Signed in as {session.user.email ?? session.user.name}</span>
+      <span>Signed in as {session.user.email ?? session.user.name ?? session.user.sub}</span>
       <a href="/auth/logout" className="font-medium underline">
         Log out
       </a>
