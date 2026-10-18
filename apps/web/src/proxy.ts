@@ -8,7 +8,8 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
+  // Skip static files (public/ assets) so they don't decrypt/re-set the session cookie.
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)",
+    "/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|txt|xml)$).*)",
   ],
 };
