@@ -1,5 +1,18 @@
 # ClassFlow
 
+Engineering documentation for the frontend, backend, database and local infrastructure:
+
+- [Architecture](docs/architecture.md)
+- [Authentication and authorization](docs/authentication.md)
+- [Testing and verification](docs/testing.md)
+- [Database migrations](docs/database-migrations.md)
+- [Shared AI development guidance](docs/ai-development.md)
+- [Engineering backlog](docs/backlog.md)
+
+Coding agents start with [AGENTS.md](AGENTS.md). Claude Code imports the same
+instructions through [CLAUDE.md](CLAUDE.md). App and database directories contain
+additional scoped guidance.
+
 Phase 1 — Product Planning
 Business problems, users, workflows, MVP, and unresolved requirements.
 

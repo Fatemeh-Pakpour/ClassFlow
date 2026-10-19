@@ -1,3 +1,21 @@
+# Web instructions
+
+Follow the root `AGENTS.md`. Shared documentation paths are relative to the repo root.
+
+- Use the App Router and existing component conventions. Keep components on the
+  server unless browser state, events or APIs require a client component.
+- Keep Auth0 secrets and access tokens on the server. Read
+  `docs/authentication.md` before changing sessions, proxy or protected UI.
+- The Auth0 proxy manages auth routes and session middleware; it does not by itself
+  protect every page. Check sessions explicitly for protected server-rendered UI.
+- Do not import `@classflow/db` into the frontend. Put business rules and protected
+  data operations in the API; use server-side token handling when adding API calls.
+- Match the existing Tailwind and component styling patterns. Use semantic HTML,
+  accessible labels and keyboard behavior; handle loading, empty and error states.
+- Run web lint and typecheck; build for routing, rendering or configuration changes.
+  There is currently no automated frontend test script. Report manual checks and
+  gaps accurately rather than claiming root `pnpm test` tests the UI.
+
 <!-- BEGIN:nextjs-agent-rules -->
 
 ## This is NOT the Next.js you know
