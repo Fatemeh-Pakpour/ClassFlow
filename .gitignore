@@ -81,6 +81,7 @@ temp/
 
 # ─── Claude Code (personal settings only) ────────────────────
 .claude/settings.local.json
+.claude/skills/auth0/
 
 # ─── OS files ────────────────────────────────────────────────
 .DS_Store

@@ -53,6 +53,20 @@ describe('App (e2e)', () => {
       .expect('access-control-allow-origin', 'http://localhost:3000');
   });
 
+  it('rejects protected routes without an access token', () => {
+    return request(app.getHttpServer())
+      .get('/api/v1/me')
+      .expect(401)
+      .expect('www-authenticate', /^Bearer/);
+  });
+
+  it('rejects a malformed access token', () => {
+    return request(app.getHttpServer())
+      .get('/api/v1/me')
+      .set('Authorization', 'Bearer not-a-jwt')
+      .expect(401);
+  });
+
   afterEach(async () => {
     await app.close();
   });

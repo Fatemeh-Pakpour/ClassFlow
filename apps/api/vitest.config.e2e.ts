@@ -13,6 +13,8 @@ export default defineConfig({
       CORS_ORIGINS: 'http://localhost:3000',
       DATABASE_URL: 'postgresql://test:test@localhost:5433/test',
       RABBITMQ_URL: 'amqp://test:test@localhost:5672/test',
+      AUTH0_ISSUER_BASE_URL: 'https://classflow-test.auth0.example/',
+      AUTH0_AUDIENCE: 'https://api.classflow.test',
     },
   },
 });
