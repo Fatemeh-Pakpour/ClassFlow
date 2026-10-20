@@ -1,6 +1,6 @@
 import { Controller, Get, VERSION_NEUTRAL } from '@nestjs/common';
 import { HealthCheck, HealthCheckService } from '@nestjs/terminus';
-import { Public } from '../auth/public.decorator.js';
+import { Public } from '../../modules/identity/public.decorator.js';
 import { DatabaseHealthIndicator } from './database.health.js';
 
 // Unversioned on purpose: probes (Docker, load balancers) hit a stable /api/health.

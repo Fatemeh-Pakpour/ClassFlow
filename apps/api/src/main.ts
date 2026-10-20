@@ -1,9 +1,9 @@
-import { ConsoleLogger, Logger } from '@nestjs/common';
+import { ConsoleLogger, Logger, ShutdownSignal } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module.js';
 import { configureApp } from './app.setup.js';
-import type { Env } from './config/env.schema.js';
+import type { Env } from './infrastructure/config/env.schema.js';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -11,6 +11,11 @@ async function bootstrap() {
     logger: new ConsoleLogger({ json: process.env.NODE_ENV === 'production' }),
   });
   configureApp(app);
+
+  app.enableShutdownHooks([
+    ShutdownSignal.SIGINT,
+    ShutdownSignal.SIGTERM,
+  ]);
 
   const port = app.get(ConfigService<Env, true>).get('PORT', { infer: true });
   await app.listen(port);

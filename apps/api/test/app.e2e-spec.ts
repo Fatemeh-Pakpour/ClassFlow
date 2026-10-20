@@ -4,14 +4,12 @@ import request from 'supertest';
 import { App } from 'supertest/types.js';
 import { AppModule } from './../src/app.module.js';
 import { configureApp } from './../src/app.setup.js';
-import { getDrizzleToken } from '@nestjs/drizzle';
+import { DATABASE } from '../src/infrastructure/database/database.token.js';
 
 // HTTP-layer e2e: Postgres is stubbed so these run without Docker.
 // Tests that exercise real queries belong in a separate integration suite.
-const fakeDb = {
-  execute: async () => ({ rows: [] }),
-  // DrizzleModule closes db.$client on shutdown.
-  $client: { end: async () => {} },
+const databaseStub = {
+  execute: vi.fn().mockResolvedValue({ rows: [] }),
 };
 
 describe('App (e2e)', () => {
@@ -21,8 +19,8 @@ describe('App (e2e)', () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     })
-      .overrideProvider(getDrizzleToken())
-      .useValue(fakeDb)
+      .overrideProvider(DATABASE)
+      .useValue(databaseStub)
       .compile();
 
     app = moduleFixture.createNestApplication();

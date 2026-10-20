@@ -1,12 +1,12 @@
 import { type Database, sql } from '@classflow/db';
-import { Injectable } from '@nestjs/common';
-import { InjectDrizzle } from '@nestjs/drizzle';
+import { Inject, Injectable } from '@nestjs/common';
 import { HealthIndicatorService } from '@nestjs/terminus';
+import { DATABASE } from '../database/database.token.js';
 
 @Injectable()
 export class DatabaseHealthIndicator {
   constructor(
-    @InjectDrizzle() private readonly db: Database,
+    @Inject(DATABASE) private readonly db: Database,
     private readonly healthIndicatorService: HealthIndicatorService,
   ) {}
 

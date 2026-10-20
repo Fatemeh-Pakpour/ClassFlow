@@ -8,4 +8,4 @@ import { MeController } from './me.controller.js';
   // Registered through DI (not app.useGlobalGuards) so it also applies in e2e tests.
   providers: [{ provide: APP_GUARD, useClass: JwtAuthGuard }],
 })
-export class AuthModule {}
+export class IdentityModule {}

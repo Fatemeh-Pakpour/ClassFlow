@@ -1,11 +1,10 @@
-import { createDb } from '@classflow/db';
 import { Module, StandardSchemaValidationPipe } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import { APP_PIPE } from '@nestjs/core';
-import { DrizzleModule } from '@nestjs/drizzle';
-import { AuthModule } from './auth/auth.module.js';
-import { envSchema, type Env } from './config/env.schema.js';
-import { HealthModule } from './health/health.module.js';
+import { DatabaseModule } from './infrastructure/database/database.module.js';
+import { IdentityModule } from './modules/identity/identity.module.js';
+import { envSchema } from './infrastructure/config/env.schema.js';
+import { HealthModule } from './infrastructure/health/health.module.js';
 
 @Module({
   imports: [
@@ -14,21 +13,8 @@ import { HealthModule } from './health/health.module.js';
       cache: true,
       validationSchema: envSchema,
     }),
-    // Global: inject anywhere with @InjectDrizzle(). The pool is closed on shutdown.
-    // The instance comes from @classflow/db so the api and worker share one
-    // setup (schema, snake_case casing, pool settings).
-    DrizzleModule.forRootAsync({
-      inject: [ConfigService],
-      useFactory: (config: ConfigService<Env, true>) => ({
-        db: createDb({
-          connectionString: config.get('DATABASE_URL', { infer: true }),
-          maxConnections: config.get('DATABASE_POOL_MAX', { infer: true }),
-          logQueries: config.get('DATABASE_LOG_QUERIES', { infer: true }),
-          applicationName: 'classflow-api',
-        }).db,
-      }),
-    }),
-    AuthModule,
+    DatabaseModule,
+    IdentityModule,
     HealthModule,
   ],
   providers: [
