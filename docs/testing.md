@@ -15,6 +15,11 @@ Run commands below from the repository root. Package scripts are authoritative.
 
 ## Existing coverage and limits
 
+`.github/workflows/ci.yml` runs dependency installation, workspace lint/type checks,
+API unit and HTTP tests, and the API build on pushes and pull requests. It does not
+deploy or apply migrations. Frontend production builds and live Auth0/database
+integration are not covered by that workflow.
+
 API unit tests cover the JWT guard and health controller. HTTP tests instantiate
 `AppModule`, apply the real `configureApp` and override the database provider with
 a stub. They check health, security headers, CORS and rejection of missing/malformed
