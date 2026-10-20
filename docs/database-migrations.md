@@ -16,7 +16,8 @@ index and a status enum. Review actual constraints before changing write behavio
 ## Local workflow
 
 1. Configure `packages/db/.env` from its example for an explicitly identified local
-   disposable database. Verify connectivity; see the Compose caveat in architecture.md.
+   disposable database. Verify connectivity; see the Compose caveat in
+   [architecture](architecture/README.md).
 2. Edit schema definitions and exports. Consider existing rows and deployed clients.
 3. Run `pnpm db:generate` from the repository root.
 4. Review generated SQL and metadata for unintended drops, renames, locking,

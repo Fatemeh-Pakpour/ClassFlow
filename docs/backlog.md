@@ -155,7 +155,7 @@ Acceptance criteria:
 - The policy defines suspended-user behavior, denial responses and any membership
   or role changes during an active session.
 - Required schema/API changes and permitted public operations are identified.
-- The decision is recorded under `docs/decisions/`; unresolved product choices are
+- The decision is recorded under `docs/adr/`; unresolved product choices are
   explicit before enforcement is implemented.
 
 ## CF-007: Enforce authorization for the first protected feature

@@ -16,7 +16,11 @@ operations must check the session and handle unauthenticated access deliberately
 
 ## Implemented API flow
 
-`AuthModule` registers `JwtAuthGuard` globally through `APP_GUARD`. Routes require
+API identity source lives in `apps/api/src/modules/identity`; web identity UI lives
+in `apps/web/src/features/identity/components`. The server Auth0 client remains
+in `apps/web/src/lib/auth0.ts`.
+
+`IdentityModule` registers `JwtAuthGuard` globally through `APP_GUARD`. Routes require
 a bearer access token unless `@Public()` metadata opts them out. Handler metadata
 takes precedence over controller metadata.
 
@@ -46,7 +50,7 @@ on hidden UI controls or client-submitted ownership identifiers.
 ## Configuration and verification
 
 Web variable names are documented in `apps/web/.env.example`. API issuer/audience
-validation lives in `apps/api/src/config/env.schema.ts` and its `.env.example`.
+validation lives in `apps/api/src/infrastructure/config/env.schema.ts` and its `.env.example`.
 Keep issuer/audience configuration consistent across the apps and Auth0.
 
 Never commit secrets or expose tokens in browser storage, logs or error responses.

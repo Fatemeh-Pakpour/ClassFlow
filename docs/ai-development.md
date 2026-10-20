@@ -46,6 +46,6 @@ install skills or change personal assistant settings.
 
 ## Decision records
 
-Use `docs/decisions/template.md` for decisions with lasting cross-cutting impact.
+Use `docs/adr/template.md` for decisions with lasting cross-cutting impact.
 Keep the record short and explain the problem, chosen approach and consequences.
 Do not create records for routine implementation details.

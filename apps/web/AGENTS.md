@@ -4,6 +4,8 @@ Follow the root `AGENTS.md`. Shared documentation paths are relative to the repo
 
 - Use the App Router and existing component conventions. Keep components on the
   server unless browser state, events or APIs require a client component.
+- Keep business UI and feature hooks in `src/features/<feature>`, generic shared
+  UI in `src/components`, and routing in `src/app`. Read `src/features/README.md`.
 - Keep Auth0 secrets and access tokens on the server. Read
   `docs/authentication.md` before changing sessions, proxy or protected UI.
 - The Auth0 proxy manages auth routes and session middleware; it does not by itself

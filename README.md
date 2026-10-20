@@ -2,7 +2,7 @@
 
 Engineering documentation for the frontend, backend, database and local infrastructure:
 
-- [Architecture](docs/architecture.md)
+- [Architecture](docs/architecture/README.md)
 - [Authentication and authorization](docs/authentication.md)
 - [Testing and verification](docs/testing.md)
 - [Database migrations](docs/database-migrations.md)

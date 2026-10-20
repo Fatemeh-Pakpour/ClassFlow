@@ -16,7 +16,7 @@ changes to architecture explicitly rather than introducing them incidentally.
 
 | Task | Read first |
 | --- | --- |
-| Cross-package change, new feature, dependency or service | `docs/architecture.md` |
+| Cross-package change, new feature, dependency or service | `docs/architecture/README.md` |
 | Login, sessions, tokens, protected routes or permissions | `docs/authentication.md` |
 | Behavior change, bug fix or validation | `docs/testing.md` |
 | Schema, query constraints, seed data or migration | `docs/database-migrations.md` |
