@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { Suspense } from "react";
-import { AuthStatus } from "@/components/auth-status";
+import { AuthStatus } from "@/features/identity/components/auth-status";
 
 export default function Home() {
   return (
