@@ -29,6 +29,13 @@
       "when": 1792139909596,
       "tag": "0003_broken_bushwacker",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1792584939023,
+      "tag": "0004_nifty_cannonball",
+      "breakpoints": true
     }
   ]
 }

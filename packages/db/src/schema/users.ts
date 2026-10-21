@@ -12,6 +12,7 @@ export const users = pgTable(
   'users',
   {
     id: id(),
+    auth0Subject: text('auth0_subject').unique(),
     email: varchar({ length: 254 }).notNull(),
     name: varchar({ length: 100 }).notNull(),
     status: userStatusEnum()

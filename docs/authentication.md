@@ -38,10 +38,12 @@ A valid token establishes identity, not permission to every resource. No applica
 role model, resource ownership checks or permission enforcement is currently
 implemented. Returning `permissions` from `/me` does not enforce them.
 
-The users table currently has no Auth0 subject column or implemented identity-sync
-flow. Do not assume that a login creates a database user or that an email address
-provides a trustworthy identity mapping. Define and record the mapping before
-implementing user provisioning or ownership checks.
+The users schema includes a nullable, unique `auth0Subject` column, introduced by
+migration 0004. Existing and seed users can remain unmapped with NULL subjects.
+Identity resolution and first-login provisioning are not implemented yet. New
+Auth0-backed users must use the verified token subject; email alone must not link
+accounts. The initial policy is to create a local user on the first authenticated
+API interaction after login, once trusted profile data is available.
 
 For new protected operations, specify the resource, allowed actor and access rule;
 enforce that rule in the API and test allowed and denied cases. Never rely solely
