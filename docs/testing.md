@@ -26,6 +26,11 @@ a stub. They check health, security headers, CORS and rejection of missing/malfo
 tokens. They do not verify real queries, migrations or live Auth0 login/token issuance.
 The HTTP config supplies test environment values and does not require local secrets.
 
+Repository unit tests verify that PostgreSQL email uniqueness violations (direct
+or wrapped by Drizzle) become a neutral `EmailAlreadyExistsError`, while other
+failures propagate unchanged. Registration HTTP tests exercise the real service's
+translation into a registration conflict or same-subject race recovery.
+
 `users.e2e-spec.ts` tests registration through the real global guard and schema
 pipe, with a controlled token verifier and stubbed repository. It covers body
 validation, subject ownership, verified-email claims, active status, repeated calls, the insert-race

@@ -15,6 +15,11 @@ the owning Nest module. Do not import another module's private repository or wri
 its tables directly. Avoid circular dependencies and routine use of `forwardRef`.
 The global auth guard is a deliberate cross-cutting exception.
 
+Repositories report persistence outcomes without importing application errors.
+For example, `EmailAlreadyExistsError` describes database uniqueness; UsersService
+decides whether to recover the caller's concurrent registration or raise
+`UserEmailConflictError`. The controller maps that application error to HTTP 409.
+
 The database package centralizes schema and migrations, but each business module
 owns how its tables are used. Shared database access does not grant permission to
 bypass another module's invariants. These boundaries currently require code review;

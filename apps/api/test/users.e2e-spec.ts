@@ -4,7 +4,7 @@ import request from 'supertest';
 import { AppModule } from '../src/app.module.js';
 import { configureApp } from '../src/app.setup.js';
 import { DATABASE } from '../src/infrastructure/database/database.token.js';
-import { UserEmailConflictError } from '../src/modules/users/application/user-registration.errors.js';
+import { EmailAlreadyExistsError } from '../src/modules/users/infrastructure/user-persistence.errors.js';
 import { UsersRepository } from '../src/modules/users/infrastructure/user.repository.js';
 
 let tokenClaims: Record<string, unknown>;
@@ -153,7 +153,7 @@ describe('User registration HTTP boundary', () => {
   });
 
   it('does not link an email that collides during insertion', async () => {
-    repository.create.mockRejectedValue(new UserEmailConflictError());
+    repository.create.mockRejectedValue(new EmailAlreadyExistsError());
     await request(app.getHttpServer())
       .post('/api/v1/users')
       .set('Authorization', 'Bearer test-token')
@@ -223,7 +223,7 @@ describe('User registration HTTP boundary', () => {
   });
 
   it('recovers when an email conflict was created by a same-subject request', async () => {
-    repository.create.mockRejectedValue(new UserEmailConflictError());
+    repository.create.mockRejectedValue(new EmailAlreadyExistsError());
     repository.findByAuth0Subject
       .mockResolvedValueOnce(undefined)
       .mockResolvedValueOnce(storedUser);
