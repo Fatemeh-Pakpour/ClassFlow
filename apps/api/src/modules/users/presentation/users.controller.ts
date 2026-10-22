@@ -7,13 +7,17 @@ import {
   Post,
   Req,
   UnauthorizedException,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from '../application/users.service.js';
 import {
   type RegisterUserBody,
   RegisterUserBodySchema,
 } from './register-user-body.schema.js';
-import { type Request } from 'express';
+import {
+  VerifiedEmailGuard,
+  type VerifiedEmailRequest,
+} from '../../identity/verified-email.guard.js';
 import { UserEmailConflictError } from '../application/user-registration.errors.js';
 
 @Controller('users')
@@ -22,30 +26,33 @@ export class UsersController {
 
   @Post()
   @HttpCode(HttpStatus.OK)
+  @UseGuards(VerifiedEmailGuard)
   async createUser(
     @Body({ schema: RegisterUserBodySchema }) body: RegisterUserBody,
-    @Req() request: Request,
+    @Req() request: VerifiedEmailRequest,
   ) {
-    const subject = request.auth?.payload.sub;
-
-    if (typeof subject !== 'string' || subject.length === 0) {
-      throw new UnauthorizedException('Missing authenticated subject');
+    const identity = request.verifiedEmailIdentity;
+    if (!identity) {
+      throw new UnauthorizedException('Missing authenticated identity');
     }
 
     try {
       const user = await this.service.createUser({
         name: body.name,
-        email: body.email,
-        auth0Subject: subject,
+        email: identity.email,
+        emailVerified: identity.emailVerified,
+        auth0Subject: identity.auth0Subject,
       });
-      return {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        status: user.status,
-        createdAt: user.createdAt,
-        updatedAt: user.updatedAt,
-      };
+      if (user) {
+        return {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          status: user.status,
+          createdAt: user.createdAt,
+          updatedAt: user.updatedAt,
+        };
+      }
     } catch (error) {
       if (error instanceof UserEmailConflictError) {
         throw new ConflictException(error.message);
