@@ -12,10 +12,7 @@ async function bootstrap() {
   });
   configureApp(app);
 
-  app.enableShutdownHooks([
-    ShutdownSignal.SIGINT,
-    ShutdownSignal.SIGTERM,
-  ]);
+  app.enableShutdownHooks([ShutdownSignal.SIGINT, ShutdownSignal.SIGTERM]);
 
   const port = app.get(ConfigService<Env, true>).get('PORT', { infer: true });
   await app.listen(port);
