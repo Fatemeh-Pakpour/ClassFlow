@@ -26,6 +26,13 @@ a stub. They check health, security headers, CORS and rejection of missing/malfo
 tokens. They do not verify real queries, migrations or live Auth0 login/token issuance.
 The HTTP config supplies test environment values and does not require local secrets.
 
+`users.e2e-spec.ts` tests registration through the real global guard and schema
+pipe, with a controlled token verifier and stubbed repository. It covers body
+validation, subject ownership, pending status, repeated calls, the insert-race
+recovery path, pre-insert and database-reported email conflicts, and generic 500
+responses for unexpected persistence failures. Real PostgreSQL concurrency/constraint behavior
+and live Auth0 verification still require separate integration tests.
+
 There is no frontend test runner, database integration suite or browser automation
 configured. Root `pnpm test` does not run the separately named API HTTP suite.
 Do not claim coverage beyond the checks that actually ran.

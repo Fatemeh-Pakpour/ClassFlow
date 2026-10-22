@@ -40,10 +40,20 @@ implemented. Returning `permissions` from `/me` does not enforce them.
 
 The users schema includes a nullable, unique `auth0Subject` column, introduced by
 migration 0004. Existing and seed users can remain unmapped with NULL subjects.
-Identity resolution and first-login provisioning are not implemented yet. New
-Auth0-backed users must use the verified token subject; email alone must not link
-accounts. The initial policy is to create a local user on the first authenticated
-API interaction after login, once trusted profile data is available.
+`POST /api/v1/users` resolves or creates the current local account. It requires
+a valid access token and a strict body containing only `name` and `email`. The global
+schema pipe validates and trims those fields. The subject comes from the verified
+token, not the body. New accounts start as `pending_verification`; email is
+self-reported and `email_verified_at` stays NULL. This endpoint does not prove email
+ownership or grant roles. Trusted Auth0 profile retrieval and email verification
+remain future work.
+
+The endpoint returns HTTP 200 with `id`, `name`, `email`, `status`, `createdAt` and
+`updatedAt` for both new and existing users. Existing users are resolved by subject
+without updating their profile. Concurrent creation uses the unique subject
+constraint and re-reads the winning row. Email collisions return 409 without linking
+accounts by email. The web app does not yet invoke this endpoint after login;
+registration is explicit, not automatic for every authenticated request.
 
 For new protected operations, specify the resource, allowed actor and access rule;
 enforce that rule in the API and test allowed and denied cases. Never rely solely

@@ -3,9 +3,10 @@
 Each module owns a business capability, its controllers, services and persistence
 queries. Start with a flat module folder; introduce subfolders only when needed.
 
-`identity` currently owns bearer authentication and `/me`. The pre-existing `users`
-scaffold is not wired into the application. Decide its relationship to identity
-when implementing user provisioning; avoid two owners for the same lifecycle.
+`identity` owns bearer authentication and `/me`. `users` owns local account lookup
+and registration through `POST /api/v1/users`. It uses the verified subject
+without importing identity internals. New self-reported profiles remain pending
+verification; avoid two owners for the same account lifecycle.
 
 Add `classes`, `bookings`, `payments` and `notifications` with their first actual
 use case. Register a module in AppModule when it provides working behavior.

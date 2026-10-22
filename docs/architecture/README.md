@@ -25,7 +25,7 @@ apps/
     lib/                         # Integration helpers and server Auth0 client
   api/src/
     modules/identity/            # JWT authentication and /me
-    modules/users/               # Existing unwired scaffold
+    modules/users/               # Local account lookup and registration
     infrastructure/
       config/                    # Environment schema
       database/                  # Nest database wiring
