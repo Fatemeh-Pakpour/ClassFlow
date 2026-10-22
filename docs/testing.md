@@ -29,12 +29,13 @@ The HTTP config supplies test environment values and does not require local secr
 `users.e2e-spec.ts` tests registration through the real global guard and schema
 pipe, with a controlled token verifier and stubbed repository. It covers body
 validation, subject ownership, verified-email claims, active status, repeated calls, the insert-race
-recovery path, pre-insert and database-reported email conflicts, and generic 500
+recovery path, database-reported email conflicts, and generic 500
 responses for unexpected persistence failures. Real PostgreSQL concurrency/constraint behavior
 and live Auth0 verification still require separate integration tests. Registration
 coverage also checks missing/false/malformed claims are rejected before database
 access, unrelated authenticated routes remain accessible, client email is rejected,
-and same-subject races recover after both pre-check and insert email conflicts.
+and same-subject races recover after insert email conflicts. Registration does not
+query email availability before insertion; the database unique constraint is authoritative.
 
 There is no frontend test runner, database integration suite or browser automation
 configured. Root `pnpm test` does not run the separately named API HTTP suite.

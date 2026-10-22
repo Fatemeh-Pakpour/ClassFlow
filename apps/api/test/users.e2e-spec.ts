@@ -52,7 +52,6 @@ describe('User registration HTTP boundary', () => {
   let app: INestApplication;
   const repository = {
     findByAuth0Subject: vi.fn(),
-    findByEmail: vi.fn(),
     create: vi.fn(),
   };
 
@@ -63,7 +62,6 @@ describe('User registration HTTP boundary', () => {
       'https://classflow.app/email_verified': true,
     };
     repository.findByAuth0Subject.mockReset().mockResolvedValue(undefined);
-    repository.findByEmail.mockReset().mockResolvedValue(undefined);
     repository.create.mockReset().mockResolvedValue(storedUser);
     const module = await Test.createTestingModule({ imports: [AppModule] })
       .overrideProvider(DATABASE)
@@ -86,7 +84,6 @@ describe('User registration HTTP boundary', () => {
       .send({ name: 'Ana' })
       .expect(401);
     expect(repository.create).not.toHaveBeenCalled();
-    expect(repository.findByEmail).not.toHaveBeenCalled();
   });
 
   it('uses verified subject and email, trims name and records verification', async () => {
@@ -128,7 +125,6 @@ describe('User registration HTTP boundary', () => {
       .send(body)
       .expect(400);
     expect(repository.findByAuth0Subject).not.toHaveBeenCalled();
-    expect(repository.findByEmail).not.toHaveBeenCalled();
     expect(repository.create).not.toHaveBeenCalled();
   });
 
@@ -140,7 +136,6 @@ describe('User registration HTTP boundary', () => {
       .send({ name: 'Different' })
       .expect(200);
     expect(response.body.name).toBe('Ana');
-    expect(repository.findByEmail).not.toHaveBeenCalled();
     expect(repository.create).not.toHaveBeenCalled();
   });
 
@@ -155,20 +150,6 @@ describe('User registration HTTP boundary', () => {
       .send({ name: 'Ana' })
       .expect(200);
     expect(repository.findByAuth0Subject).toHaveBeenCalledTimes(2);
-  });
-
-  it('rejects an email collision found before insertion', async () => {
-    repository.findByEmail.mockResolvedValue({
-      ...storedUser,
-      auth0Subject: 'auth0|other',
-    });
-    await request(app.getHttpServer())
-      .post('/api/v1/users')
-      .set('Authorization', 'Bearer test-token')
-      .send({ name: 'Ana' })
-      .expect(409);
-    expect(repository.findByEmail).toHaveBeenCalledWith('ana@example.com');
-    expect(repository.create).not.toHaveBeenCalled();
   });
 
   it('does not link an email that collides during insertion', async () => {
@@ -219,7 +200,6 @@ describe('User registration HTTP boundary', () => {
         .send({ name: 'Ana' })
         .expect(403);
       expect(repository.findByAuth0Subject).not.toHaveBeenCalled();
-      expect(repository.findByEmail).not.toHaveBeenCalled();
       expect(repository.create).not.toHaveBeenCalled();
     },
   );
@@ -253,18 +233,5 @@ describe('User registration HTTP boundary', () => {
       .send({ name: 'Ana' })
       .expect(200);
     expect(repository.findByAuth0Subject).toHaveBeenCalledTimes(2);
-  });
-
-  it('recovers if a same-subject registration completed before the email lookup', async () => {
-    repository.findByEmail.mockResolvedValue(storedUser);
-    repository.findByAuth0Subject
-      .mockResolvedValueOnce(undefined)
-      .mockResolvedValueOnce(storedUser);
-    await request(app.getHttpServer())
-      .post('/api/v1/users')
-      .set('Authorization', 'Bearer test-token')
-      .send({ name: 'Ana' })
-      .expect(200);
-    expect(repository.create).not.toHaveBeenCalled();
   });
 });
