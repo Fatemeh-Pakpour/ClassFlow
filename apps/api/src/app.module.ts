@@ -5,6 +5,7 @@ import { DatabaseModule } from './infrastructure/database/database.module.js';
 import { IdentityModule } from './modules/identity/identity.module.js';
 import { envSchema } from './infrastructure/config/env.schema.js';
 import { HealthModule } from './infrastructure/health/health.module.js';
+import { UserModule } from './modules/users/users.module.js';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { HealthModule } from './infrastructure/health/health.module.js';
     DatabaseModule,
     IdentityModule,
     HealthModule,
+    UserModule,
   ],
   providers: [
     // Registered through DI (not app.useGlobalPipes) so it also applies in e2e tests.
