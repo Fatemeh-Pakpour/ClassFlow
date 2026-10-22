@@ -4,9 +4,8 @@ Each module owns a business capability, its controllers, services and persistenc
 queries. Start with a flat module folder; introduce subfolders only when needed.
 
 `identity` owns bearer authentication and `/me`. `users` owns local account lookup
-and registration through `POST /api/v1/users`. It uses the verified subject
-without importing identity internals. New self-reported profiles remain pending
-verification; avoid two owners for the same account lifecycle.
+and registration through `POST /api/v1/users`. It imports IdentityModule for the exported verified-email guard. Registration
+requires verified token email claims and accepts only a display name from the body; avoid two owners for the same account lifecycle.
 
 Add `classes`, `bookings`, `payments` and `notifications` with their first actual
 use case. Register a module in AppModule when it provides working behavior.
