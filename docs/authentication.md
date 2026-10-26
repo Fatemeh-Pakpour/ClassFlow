@@ -36,7 +36,9 @@ Preserve this behavior and its tests when editing the guard.
 
 A valid token establishes identity, not permission to every resource. No application
 role model, resource ownership checks or permission enforcement is currently
-implemented. Returning `permissions` from `/me` does not enforce them.
+implemented. Returning `permissions` from `/me` does not enforce them. A proposed
+role model and access matrix awaiting product review is in
+[ADR 0002](adr/0002-application-roles-and-resource-authorization.md).
 
 The users schema includes a nullable, unique `auth0Subject` column, introduced by
 migration 0004. Existing and seed users can remain unmapped with NULL subjects.
