@@ -31,6 +31,8 @@ coverage/
 test-results/
 playwright-report/
 playwright/.cache/
+# Saved login sessions (live cookies) from apps/*/playwright/.auth.
+**/playwright/.auth/
 
 # ─── Environment & secrets ───────────────────────────────────
 # Commit a template (.env.example) instead of real values.
@@ -82,6 +84,9 @@ temp/
 # ─── Claude Code (personal settings only) ────────────────────
 .claude/settings.local.json
 .claude/skills/auth0/
+
+# ─── Playwright MCP (screenshots, snapshots, console logs) ───
+.playwright-mcp/
 
 # ─── OS files ────────────────────────────────────────────────
 .DS_Store
