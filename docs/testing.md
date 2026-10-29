@@ -9,6 +9,7 @@ Run commands below from the repository root. Package scripts are authoritative.
 | API lint / types | `pnpm --filter @classflow/api lint` / `pnpm --filter @classflow/api typecheck` | oxlint / TypeScript |
 | Web lint / types | `pnpm --filter @classflow/web lint` / `pnpm --filter @classflow/web typecheck` | ESLint / TypeScript |
 | Web build | `pnpm build:web` | Next.js production build |
+| Web end-to-end | `pnpm --filter @classflow/web test:e2e` | Playwright against the live Auth0 development tenant; local only |
 | DB types / build | `pnpm --filter @classflow/db typecheck` / `pnpm --filter @classflow/db build` | TypeScript and exported artifacts |
 | Migration consistency | `pnpm db:check` | Drizzle migration history check |
 | Workspace checks | `pnpm lint`, `pnpm typecheck`, `pnpm build`, `pnpm test` | Available package scripts |
@@ -42,8 +43,26 @@ access, unrelated authenticated routes remain accessible, client email is reject
 and same-subject races recover after insert email conflicts. Registration does not
 query email availability before insertion; the database unique constraint is authoritative.
 
-There is no frontend test runner, database integration suite or browser automation
-configured. Root `pnpm test` does not run the separately named API HTTP suite.
+`apps/web/e2e` holds Playwright tests for the login and signup flows. They run a
+real browser against `localhost:3000` (starting `pnpm dev` unless it is already
+running) and the hosted Auth0 Universal Login pages of the development tenant:
+signed-out state, redirect to Auth0, wrong-password rejection, successful login,
+session persistence across reload, logout, the signup form, the tenant password
+policy and rejection of an already-registered email. `auth.setup.ts` logs in once
+and saves the session to `apps/web/playwright/.auth/` (git-ignored; it holds a live
+cookie) for the `logged-in` project.
+
+Set `E2E_USER_EMAIL` and `E2E_USER_PASSWORD` in `apps/web/.env.local` for a dedicated,
+email-verified test user, and install the browser once with
+`pnpm --filter @classflow/web exec playwright install chromium`. Tests run serially and
+make one wrong-password attempt per run; repeated failures can trigger Auth0
+brute-force protection for that user. Successful signup is not covered because it
+would create a real tenant user on every run. These tests are not in CI (they need
+the tenant and credentials), do not exercise the API or database, and do not cover
+Google login or email verification.
+
+There is no other frontend test runner and no database integration suite. Root
+`pnpm test` runs neither the API HTTP suite nor the web end-to-end suite.
 Do not claim coverage beyond the checks that actually ran.
 
 ## Choosing checks
