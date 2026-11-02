@@ -104,8 +104,13 @@ on hidden UI controls or client-submitted ownership identifiers.
 
 ## Configuration and verification
 
-Web variable names are documented in `apps/web/.env.example`. API issuer/audience
-validation lives in `apps/api/src/infrastructure/config/env.schema.ts` and its `.env.example`.
+Web variable names are documented in `apps/web/.env.example` and validated by
+`apps/web/src/lib/env.schema.ts` when the server starts (`src/instrumentation.ts`;
+`next build` does not need them). In production, `next start` exits on an invalid
+value, and `APP_BASE_URL` must use https except on loopback hosts. API issuer/audience
+validation lives in `apps/api/src/infrastructure/config/env.schema.ts` and its `.env.example`;
+in production it also rejects localhost CORS origins, the `change-me` placeholder
+passwords and `DATABASE_LOG_QUERIES=true`.
 Keep issuer/audience configuration consistent across the apps and Auth0.
 
 Never commit secrets or expose tokens in browser storage, logs or error responses.

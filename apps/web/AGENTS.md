@@ -15,8 +15,11 @@ Follow the root `AGENTS.md`. Shared documentation paths are relative to the repo
 - Match the existing Tailwind and component styling patterns. Use semantic HTML,
   accessible labels and keyboard behavior; handle loading, empty and error states.
 - Run web lint and typecheck; build for routing, rendering or configuration changes.
-  There is currently no automated frontend test script. Report manual checks and
-  gaps accurately rather than claiming root `pnpm test` tests the UI.
+  `pnpm test` runs Vitest unit tests for `src/**/*.test.ts` (currently the env
+  schema only); there are no component tests. Report manual checks and gaps
+  accurately rather than claiming root `pnpm test` tests the UI.
+- Validate new server environment variables in `src/lib/env.schema.ts` (checked at
+  server start by `src/instrumentation.ts`) and update `.env.example`.
 
 <!-- BEGIN:nextjs-agent-rules -->
 
