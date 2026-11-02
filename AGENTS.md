@@ -64,4 +64,4 @@ pnpm build
 ```
 
 `pnpm test` runs available package test scripts; it does not include the API's
-separate `test:e2e` script or provide frontend/database test coverage.
+separate `test:e2e` scripts or provide frontend UI/database test coverage.

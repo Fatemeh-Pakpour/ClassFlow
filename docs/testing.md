@@ -7,6 +7,7 @@ Run commands below from the repository root. Package scripts are authoritative.
 | API unit tests | `pnpm --filter @classflow/api test` | Vitest `*.spec.ts` |
 | API HTTP tests | `pnpm --filter @classflow/api test:e2e` | Separate Vitest `*.e2e-spec.ts` config |
 | API lint / types | `pnpm --filter @classflow/api lint` / `pnpm --filter @classflow/api typecheck` | oxlint / TypeScript |
+| Web unit tests | `pnpm --filter @classflow/web test` | Vitest `src/**/*.test.ts` |
 | Web lint / types | `pnpm --filter @classflow/web lint` / `pnpm --filter @classflow/web typecheck` | ESLint / TypeScript |
 | Web build | `pnpm build:web` | Next.js production build |
 | Web end-to-end | `pnpm --filter @classflow/web test:e2e` | Playwright against the live Auth0 development tenant; local only |
@@ -61,7 +62,13 @@ would create a real tenant user on every run. These tests are not in CI (they ne
 the tenant and credentials), do not exercise the API or database, and do not cover
 Google login or email verification.
 
-There is no other frontend test runner and no database integration suite. Root
+Environment schemas have unit tests in both apps: `apps/api/src/infrastructure/config/env.schema.spec.ts`
+and `apps/web/src/lib/env.schema.test.ts` (Vitest, `pnpm --filter @classflow/web test`).
+They cover missing and malformed variables, error reporting and the production-only
+rules. Startup behavior (the API refusing to boot, `next start` exiting) was checked
+manually and is not automated.
+
+There are no frontend component tests and no database integration suite. Root
 `pnpm test` runs neither the API HTTP suite nor the web end-to-end suite.
 Do not claim coverage beyond the checks that actually ran.
 
