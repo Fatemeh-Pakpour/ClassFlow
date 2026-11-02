@@ -16,14 +16,18 @@ index and a status enum. Review actual constraints before changing write behavio
 ## Local workflow
 
 1. Configure `packages/db/.env` from its example for an explicitly identified local
-   disposable database. Verify connectivity; see the Compose caveat in
+   disposable database. Verify connectivity; Compose port mapping is described in
    [architecture](architecture/README.md).
 2. Edit schema definitions and exports. Consider existing rows and deployed clients.
 3. Run `pnpm db:generate` from the repository root.
 4. Review generated SQL and metadata for unintended drops, renames, locking,
    nullability changes and data loss. Resolve ambiguity before applying SQL.
 5. Run `pnpm db:check`, DB typecheck and DB build. Drizzle configuration requires
-   `DATABASE_URL` even for commands that do not apply migrations.
+   `DATABASE_URL` even for commands that do not apply migrations. Run
+   `pnpm test:integration`, which applies every committed migration to fresh
+   disposable databases. When a migration changes existing data or constraints, add
+   an upgrade case to `packages/db/test/migrations.integration-spec.ts`: migrate
+   `through` the previous tag, insert old-shaped rows, then apply the rest.
 6. Apply with `pnpm db:migrate` only against the identified local/test target.
    Verify both fresh installation and upgrades with representative existing data
    when the change can affect it. Check constraints and affected application paths.

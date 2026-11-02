@@ -18,7 +18,8 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:?set POSTGRES_DB in infra/.env}
     ports:
       # Bound to localhost only, so the database is not exposed to the network.
-      - "127.0.0.1:${POSTGRES_PORT:-5433}:5433"
+      # POSTGRES_PORT picks the host port; PostgreSQL listens on 5432 in the container.
+      - "127.0.0.1:${POSTGRES_PORT:-5433}:5432"
     volumes:
       # Postgres 18+ images keep data under /var/lib/postgresql/<major>/docker,
       # so the volume is mounted at the parent directory (not .../data).

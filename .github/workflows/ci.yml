@@ -11,6 +11,21 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    services:
+      # Disposable server for integration tests; each test file creates its own database.
+      postgres:
+        image: postgres:18-alpine
+        env:
+          POSTGRES_USER: classflow
+          POSTGRES_PASSWORD: classflow
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U classflow -d postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -25,4 +40,7 @@ jobs:
       - run: pnpm --filter @classflow/api test
       - run: pnpm --filter @classflow/web test
       - run: pnpm --filter @classflow/api test:e2e
+      - run: pnpm test:integration
+        env:
+          TEST_DATABASE_ADMIN_URL: postgresql://classflow:classflow@localhost:5432/postgres
       - run: pnpm build:api

@@ -26,6 +26,7 @@
     "infra:logs": "docker compose -f infra/compose.yaml logs -f",
     "infra:ps": "docker compose -f infra/compose.yaml ps",
     "test": "pnpm -r test",
+    "test:integration": "pnpm -r test:integration",
     "typecheck": "pnpm -r typecheck"
   }
 }

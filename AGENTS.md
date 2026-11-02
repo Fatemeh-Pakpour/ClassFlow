@@ -58,10 +58,12 @@ pnpm dev:api
 pnpm --filter @classflow/db build
 pnpm --filter @classflow/api test
 pnpm --filter @classflow/api test:e2e
+pnpm test:integration          # needs TEST_DATABASE_ADMIN_URL; see docs/testing.md
 pnpm lint
 pnpm typecheck
 pnpm build
 ```
 
-`pnpm test` runs available package test scripts; it does not include the API's
-separate `test:e2e` scripts or provide frontend UI/database test coverage.
+`pnpm test` runs available package test scripts; it does not include the PostgreSQL
+integration suite (`pnpm test:integration`), the API's separate `test:e2e` scripts
+or frontend UI coverage.

@@ -7,6 +7,8 @@ Task IDs are local references for importing into a backlog tool.
 
 ## CF-001: Fix local PostgreSQL port mapping
 
+Status: Done (2026-11-02). Compose maps the host port to container port 5432.
+
 Priority: P1
 Dependencies: None
 
@@ -27,6 +29,8 @@ Acceptance criteria:
 - Existing database volumes are preserved; verification does not delete data.
 
 ## CF-002: Add real PostgreSQL integration and migration tests
+
+Status: Done (2026-11-02). See "PostgreSQL integration tests" in `docs/testing.md`.
 
 Priority: P1
 Dependencies: CF-001 if using local Compose for the test database

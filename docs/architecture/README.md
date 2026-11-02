@@ -96,10 +96,10 @@ prepare local configuration without committing credentials. Root scripts start
 apps and infrastructure independently. Consult the corresponding package scripts
 for the actual commands and the lockfile for resolved dependency versions.
 
-Infrastructure caveat: Compose currently maps PostgreSQL host port 5433 to container
-port 5433 without configuring a non-default PostgreSQL listening port. Verify and
-resolve that configuration before relying on host database connectivity. A passing
-in-container health check alone does not prove host connectivity.
+Compose publishes PostgreSQL on `127.0.0.1:${POSTGRES_PORT}` (default 5433, so it
+does not collide with another project's PostgreSQL on 5432) to the container's
+default listening port 5432. Connection strings on the host use the host port.
+A passing in-container health check alone does not prove host connectivity.
 
 ## Decisions and evolution
 
